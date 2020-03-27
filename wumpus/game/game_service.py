@@ -1,7 +1,13 @@
 import math
 
+from wumpus.game.game import GameStatus
 from wumpus.game.game_builder import a_game
 from wumpus.vector2d import Vector2D
+
+
+class TurnDirection:
+    CLOCKWISE = 'clockwise'
+    ANTICLOCKWISE = 'anticlockwise'
 
 
 def start(options):
@@ -13,12 +19,11 @@ def start(options):
 
 
 def move(game):
-    game.player.position += game.player.direction
+    position = game.player.position
+    direction = game.player.direction
 
-
-class TurnDirection:
-    CLOCKWISE = 'clockwise'
-    ANTICLOCKWISE = 'anticlockwise'
+    if _is_position_in_game_table(game, position + direction):
+        game.player.position += direction
 
 
 def turn(turn_direction, game):
@@ -38,4 +43,36 @@ def _turn_in_radians(turn_direction):
         direction_degrees = -90 * math.pi / 180
     else:
         direction_degrees = 90 * math.pi / 180
+
     return direction_degrees
+
+
+def fire(game):
+    if game.player.arrows_left <= 0:
+        return
+
+    game.player.arrows_left -= 1
+    arrow_position = game.player.position.copy()
+
+    while _is_position_in_game_table(game, arrow_position):
+        arrow_position += game.player.direction
+        if game.wumpus.position == arrow_position:
+            game.wumpus.is_alive = False
+
+
+def _is_position_in_game_table(game, position):
+    return (
+        0 <= position.x < game.size[0] and
+        0 <= position.y < game.size[1]
+    )
+
+
+def take_gold(game):
+    if game.is_over_gold:
+        game.player.has_gold = True
+        game.gold = None
+
+
+def leave_dungeon(game):
+    if game.is_player_at_exit and game.player_has_gold:
+        game.status = GameStatus.WIN

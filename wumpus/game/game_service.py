@@ -52,7 +52,7 @@ def _turn_in_radians(turn_direction):
 
 def fire(game):
     if game.player.arrows_left <= 0:
-        return
+        return False
 
     game.player.arrows_left -= 1
     arrow_position = game.player.position.copy()
@@ -61,6 +61,9 @@ def fire(game):
         arrow_position += game.player.direction
         if game.wumpus.position == arrow_position:
             game.wumpus.is_alive = False
+            return True
+
+    return False
 
 
 def _is_position_in_game_table(game, position):

@@ -111,27 +111,41 @@ def it_kills_the_wumpus_when_player_fires_an_arrow_in_its_direction():
     game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
     game.wumpus.position = Vector2D(0, 3)
 
-    game_service.fire(game)
+    fire_hit = game_service.fire(game)
 
-    assert game.wumpus.is_alive is False
+    assert game.is_wumpus_alive is False
+    assert fire_hit
+
+
+def it_stops_hitting_the_wumpus_on_fire_arrow_when_is_already_dead():
+    game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
+    game.wumpus.position = Vector2D(0, 3)
+    game.wumpus.is_alive = False
+
+    fire_hit = game_service.fire(game)
+
+    assert game.is_wumpus_alive is False
+    assert fire_hit
 
 
 def it_does_not_kill_the_wumpus_when_player_fires_an_arrow_in_other_direction():
     game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.SOUTH).build()
     game.wumpus.position = Vector2D(0, 3)
 
-    game_service.fire(game)
+    fire_hit = game_service.fire(game)
 
-    assert game.wumpus.is_alive
+    assert game.is_wumpus_alive
+    assert fire_hit is False
 
 
 def it_does_not_fire_an_arrow_when_no_arrows_left():
     game = a_game().with_hunter(arrows=0, position=Vector2D(0, 0), direction=Direction.NORTH).build()
     game.wumpus.position = Vector2D(0, 3)
 
-    game_service.fire(game)
+    fire_hit = game_service.fire(game)
 
     assert game.wumpus.is_alive
+    assert fire_hit is False
 
 
 def it_takes_the_gold_if_player_is_in_the_same_position():

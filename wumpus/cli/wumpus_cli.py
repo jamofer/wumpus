@@ -1,4 +1,5 @@
 import cmd
+import json
 
 from wumpus.cli import wumpus_cli_command_parser
 from wumpus.game import game_service, string_game_renderer
@@ -71,8 +72,15 @@ class WumpusCli(cmd.Cmd):
     @requires_game_started
     def do_fire_arrow(self, line):
         'Fires an arrow until it reaches the Wumpus or a wall. Usage: fire_arrow'
-        game_service.fire(self.game)
+        if self.game.player.arrows_left == 0:
+            print('Not enough arrows')
+            return
+
+        hit = game_service.fire(self.game)
         print(string_game_renderer.render(self.game))
+
+        if hit:
+            print('?: -Aaaaaaaaaaaaaaaaaaaa!!!!!! directly to my heart :(')
 
     @requires_game_started
     def do_take_the_gold(self, line):

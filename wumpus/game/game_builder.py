@@ -41,8 +41,8 @@ class GameBuilder(object):
         if self._is_maximum_number_of_entities_reached():
             raise GameBuilderError('Unable to allocate random empty table position')
 
-        x = random.randint(0, self.game.size[0])
-        y = random.randint(0, self.game.size[1])
+        x = random.randint(0, self.game.size[0] - 1)
+        y = random.randint(0, self.game.size[1] - 1)
 
         position = Vector2D(x, y)
 
@@ -55,7 +55,7 @@ class GameBuilder(object):
         return any([entity.position == position for entity in self.game.entities])
 
     def _is_maximum_number_of_entities_reached(self):
-        return len(self.game.entities) > self.game.size[0] * self.game.size[1]
+        return len(self.game.entities) >= self.game.size[0] * self.game.size[1]
 
 
 def a_game():

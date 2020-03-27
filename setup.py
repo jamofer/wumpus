@@ -9,5 +9,7 @@ setup(
     author='Javier Moragón',
     author_email='',
     description='',
-    scripts=['wumpus_game.py']
+    scripts=['wumpus_game.py'],
+    install_requires=['mock', 'pytest']
+
 )

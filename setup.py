@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='wumpus',
     version='',
-    packages=['wumpus', 'wumpus.game', 'wumpus.entities'],
+    packages=find_packages('wumpus'),
     url='',
     license='',
     author='Javier Moragón',

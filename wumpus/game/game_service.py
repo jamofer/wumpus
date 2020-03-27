@@ -25,6 +25,9 @@ def move(game):
     if _is_position_in_game_table(game, position + direction):
         game.player.position += direction
 
+    if game.is_over_bottomless_pit or (game.is_wumpus_alive and game.is_over_wumpus):
+        game.status = GameStatus.LOSS
+
 
 def turn(turn_direction, game):
     turn_in_radians = _turn_in_radians(turn_direction)

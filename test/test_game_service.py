@@ -1,4 +1,5 @@
 from wumpus.direction import Direction
+from wumpus.entities.bottomless_pit import BottomlessPit
 from wumpus.game import game_service
 from wumpus.game.game import GameStatus
 from wumpus.game.game_builder import a_game
@@ -30,6 +31,40 @@ def it_does_not_move_the_player_when_it_reaches_a_wall():
     game_service.move(game)
 
     assert game.player.position == Vector2D(0, 0)
+
+
+def it_kills_player_when_it_moves_to_the_bottomless_pit():
+    game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
+    game.add_bottomless_pit(BottomlessPit(Vector2D(0, 1)))
+
+    game_service.move(game)
+
+    assert game.player.position == Vector2D(0, 1)
+    assert game.is_over_bottomless_pit
+    assert game.status == GameStatus.LOSS
+
+
+def it_kills_player_when_it_moves_to_the_wumpus_and_it_is_alive():
+    game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
+    game.wumpus.position = Vector2D(0, 1)
+
+    game_service.move(game)
+
+    assert game.player.position == Vector2D(0, 1)
+    assert game.is_over_wumpus
+    assert game.status == GameStatus.LOSS
+
+
+def it_does_not_kill_player_when_it_moves_to_the_wumpus_and_it_is_dead():
+    game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
+    game.wumpus.position = Vector2D(0, 1)
+    game.wumpus.is_alive = False
+
+    game_service.move(game)
+
+    assert game.player.position == Vector2D(0, 1)
+    assert game.is_over_wumpus
+    assert game.status == GameStatus.PLAYING
 
 
 def it_changes_player_direction_clockwise():
@@ -130,7 +165,7 @@ def it_leaves_dungeon_if_player_is_in_the_same_position_as_the_exit_and_carries_
 def it_does_not_leave_the_dungeon_if_player_is_in_different_position_as_the_exit():
     game = a_game().with_hunter(position=Vector2D(0, 0)).build()
     game.player.has_gold = True
-    game_service.move(game)
+    game.exit = Vector2D(2, 0)
 
     game_service.leave_dungeon(game)
 

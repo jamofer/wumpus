@@ -7,6 +7,7 @@ from wumpus.vector2d import Vector2D
 DEFAULT_SIZE = [4, 4]
 DEFAULT_AVAILABLE_ARROWS = 2
 
+
 @dataclass
 class GameOptions(object):
     columns: int = 0

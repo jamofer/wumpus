@@ -8,5 +8,6 @@ setup(
     license='',
     author='Javier Moragón',
     author_email='',
-    description=''
+    description='',
+    scripts=['wumpus_game.py']
 )

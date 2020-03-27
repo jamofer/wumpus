@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from wumpus.cli.wumpus_cli import WumpusCli
 
 

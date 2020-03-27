@@ -1,3 +1,27 @@
+## Jamofer's fork in python
+* Required python version: python3.7
+
+Install instructions:
+```bash
+pip install -U .
+pip install pytest
+
+# Alternative Docker version
+docker build -t wumpus-game
+```
+
+Run unittests:
+```bash
+pytest .
+```
+
+Run the game:
+```bash
+./wumpus_game.py
+
+# Alternative Docker version
+docker run -it wumpus-game
+```
 wumpus
 ======
 

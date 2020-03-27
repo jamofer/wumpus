@@ -12,3 +12,11 @@ def it_starts_new_game():
 
     assert game.status == GameStatus.PLAYING
     assert game.size == [4, 4]
+
+
+def it_moves_the_player_forward_one_position():
+    game = a_game().with_hunter(position=Vector2D(0, 0), direction=Direction.NORTH).build()
+
+    game_service.move(game)
+
+    assert game.player.position == Vector2D(0, 1)

@@ -7,3 +7,7 @@ def start(options):
         .with_hunter(arrows=options.hunter_arrows)\
         .with_bottomless_pits(quantity=options.bottomless_pits)\
         .build()
+
+
+def move(game):
+    game.player.position += game.player.direction

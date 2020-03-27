@@ -125,7 +125,7 @@ def it_stops_hitting_the_wumpus_on_fire_arrow_when_is_already_dead():
     fire_hit = game_service.fire(game)
 
     assert game.is_wumpus_alive is False
-    assert fire_hit
+    assert fire_hit is False
 
 
 def it_does_not_kill_the_wumpus_when_player_fires_an_arrow_in_other_direction():

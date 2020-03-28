@@ -2,7 +2,7 @@ from mock import MagicMock, patch
 
 from wumpus.game.game import GameStatus
 from wumpus.game.game_options import GameOptions
-from wumpus.cli.wumpus_cli import WumpusCli
+from wumpus.cli.wumpus_cli import WumpusCli, game_action
 
 
 class TestWumpusCli(object):
@@ -111,3 +111,10 @@ class TestWumpusCli(object):
         self.cli.do_start_game('')
         self.cli.do_turn('')
         self.render.assert_called_once_with(self.cli.game)
+
+    def it_preserves_docstring_using_game_action_decorator(self):
+        @game_action
+        def dummy_do_action_function(self, line):
+            """doc string"""
+
+        assert dummy_do_action_function.__doc__ == 'doc string'

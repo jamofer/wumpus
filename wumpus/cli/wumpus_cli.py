@@ -8,12 +8,16 @@ from wumpus.game.game_options import GameOptions
 from wumpus.game.game_service import TurnDirection
 
 
-def requires_game_started(func):
+def game_action(func):
     def wrapper(self, *args, **kwargs):
-        if self.game and self.game.status == GameStatus.PLAYING:
-            func(self, *args, **kwargs)
-        else:
+        if not _is_game_started(self.game):
             print('Game is not running.')
+            return
+
+        func(self, *args, **kwargs)
+        print(string_game_renderer.render(self.game))
+
+    wrapper.__doc__ = func.__doc__
     return wrapper
 
 
@@ -28,7 +32,7 @@ class WumpusCli(cmd.Cmd):
         'you the Wumpus, take your bow and fire your powerful arrow!\n'
         '\n'
         'Type help or ? to list available commands\n\n'
-        'For a new game, type game_start\n'
+        'For a new game, type start_game\n'
     )
 
     def __init__(self):
@@ -57,19 +61,19 @@ class WumpusCli(cmd.Cmd):
         self.game = game_service.start(game_options)
         print(string_game_renderer.render(self.game))
 
-    @requires_game_started
+    @game_action
     def do_turn(self, line):
-        'Turn clockwise or anticlockwise, usage: turn [clockwise|anticlockwise]'
+        """Turn clockwise or anticlockwise, usage: turn [clockwise|anticlockwise]"""
         game_service.turn(line, self.game)
         print(string_game_renderer.render(self.game))
 
-    @requires_game_started
+    @game_action
     def do_move(self, line):
-        'Moves forward one position. take care with your direction. Usage: move'
+        """Moves forward one position. take care with your direction. Usage: move"""
         game_service.move(self.game)
         print(string_game_renderer.render(self.game))
 
-    @requires_game_started
+    @game_action
     def do_fire_arrow(self, line):
         'Fires an arrow until it reaches the Wumpus or a wall. Usage: fire_arrow'
         if self.game.player.arrows_left == 0:
@@ -82,15 +86,15 @@ class WumpusCli(cmd.Cmd):
         if hit:
             print('?: -Aaaaaaaaaaaaaaaaaaaa!!!!!! directly to my heart :(')
 
-    @requires_game_started
+    @game_action
     def do_take_the_gold(self, line):
-        'Takes the gold if you are in the same position. Usage: take_the_gold'
+        """Takes the gold if you are in the same position. Usage: take_the_gold"""
         game_service.take_gold(self.game)
         print(string_game_renderer.render(self.game))
 
-    @requires_game_started
+    @game_action
     def do_leave_the_dungeon(self, line):
-        'Leaves the dungeon if you are in the exit position and you have the gold. Usage: leave_the_dungeon'
+        """Leaves the dungeon if you are in the exit position and you have the gold. Usage: leave_the_dungeon"""
         game_service.leave_dungeon(self.game)
         print(string_game_renderer.render(self.game))
 
@@ -103,3 +107,7 @@ class WumpusCli(cmd.Cmd):
 
         if TurnDirection.ANTICLOCKWISE.startswith(text.lower()):
             return [TurnDirection.ANTICLOCKWISE]
+
+
+def _is_game_started(game):
+    return game and game.status == GameStatus.PLAYING

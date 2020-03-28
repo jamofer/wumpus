@@ -65,13 +65,11 @@ class WumpusCli(cmd.Cmd):
     def do_turn(self, line):
         """Turn clockwise or anticlockwise, usage: turn [clockwise|anticlockwise]"""
         game_service.turn(line, self.game)
-        print(string_game_renderer.render(self.game))
 
     @game_action
     def do_move(self, line):
         """Moves forward one position. take care with your direction. Usage: move"""
         game_service.move(self.game)
-        print(string_game_renderer.render(self.game))
 
     @game_action
     def do_fire_arrow(self, line):
@@ -81,7 +79,6 @@ class WumpusCli(cmd.Cmd):
             return
 
         hit = game_service.fire(self.game)
-        print(string_game_renderer.render(self.game))
 
         if hit:
             print('?: -Aaaaaaaaaaaaaaaaaaaa!!!!!! directly to my heart :(')
@@ -90,13 +87,11 @@ class WumpusCli(cmd.Cmd):
     def do_take_the_gold(self, line):
         """Takes the gold if you are in the same position. Usage: take_the_gold"""
         game_service.take_gold(self.game)
-        print(string_game_renderer.render(self.game))
 
     @game_action
     def do_leave_the_dungeon(self, line):
         """Leaves the dungeon if you are in the exit position and you have the gold. Usage: leave_the_dungeon"""
         game_service.leave_dungeon(self.game)
-        print(string_game_renderer.render(self.game))
 
     def complete_turn(self, text, line, start_index, end_index):
         if not text:

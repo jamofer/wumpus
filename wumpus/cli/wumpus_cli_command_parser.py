@@ -19,6 +19,4 @@ def parse_game_options(command_line):
 
 def _parse_keyword_number_values(line):
     keyword_values = re.findall(r'(\w+)=(\d+)', line)
-    print(keyword_values)
-
     return {keyword: int(value) for keyword, value in keyword_values}

@@ -112,12 +112,7 @@ def it_returns_a_human_readable_string_when_player_has_fallen_in_the_bottomless_
 
     human_readeable_string = string_game_renderer.render(game)
 
-    assert human_readeable_string == (
-        'Hunter: -AAAAAAAAAaaaaaaaaaaaaaaaaaaaaa!!!!!!!!!!!!!!!\n'
-        'Narrator: -Poor soul, he felt in the forat. It\'s better gold in hand than a hundred in the pit\n'
-        'You lose!\n'
-        '\n'
-    )
+    assert human_readeable_string == string_game_renderer.DEAD_BY_PIT
 
 
 def it_returns_a_human_readable_string_when_player_has_been_killed_by_wumpus():
@@ -127,14 +122,7 @@ def it_returns_a_human_readable_string_when_player_has_been_killed_by_wumpus():
 
     human_readeable_string = string_game_renderer.render(game)
 
-    assert human_readeable_string == (
-        'Hunter: -Heyy Wumpus, show me your moves!\n'
-        '(CHRUP CHRUP)\n'
-        'Wumpus: -Mmmmm... Human meat <3\n'
-        'Narrator: -Poor soul, now the legend of the Hunter is inside the Wumpus\'s stomach\n'
-        'You lose!\n'
-        '\n'
-    )
+    assert human_readeable_string == string_game_renderer.KILLED_BY_WUMPUS
 
 
 def it_returns_a_human_readable_string_when_player_leaves_successfully_the_dungeon_with_the_gold_and_the_wumpus_alive():
@@ -144,13 +132,7 @@ def it_returns_a_human_readable_string_when_player_leaves_successfully_the_dunge
 
     human_readeable_string = string_game_renderer.render(game)
 
-    assert human_readeable_string == (
-        'Wumpus: -Heyy Hunter, show me your moves!\n'
-        'Narrator: Hunter takes the gold cowardly and runs to the exit (faster than Speedy Gonzalez).\n'
-        'Wumpus: -NOOooOoOoooooo!!! :(\n'
-        'You win!\n'
-        '\n'
-    )
+    assert human_readeable_string == string_game_renderer.WIN_WITHOUT_KILL_WUMPUS
 
 
 def it_returns_a_human_readable_string_when_player_leaves_successfully_the_dungeon_with_the_gold_and_the_wumpus_dead():
@@ -161,12 +143,4 @@ def it_returns_a_human_readable_string_when_player_leaves_successfully_the_dunge
 
     human_readeable_string = string_game_renderer.render(game)
 
-    assert human_readeable_string == (
-        'Narrator: Toss a coin to your Hunter\n'
-        'Narrator: Oh, valley of plenty\n'
-        'Narrator: Oh, valley of plenty, oh\n'
-        'Narrator: Toss a coin to your Hunter\n'
-        'Narrator: ... Nevermind\n'
-        'You win!\n'
-        '\n'
-    )
+    assert human_readeable_string == string_game_renderer.WIN_WITH_WUMPUS_DEAD

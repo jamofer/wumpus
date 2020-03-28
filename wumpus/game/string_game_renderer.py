@@ -12,24 +12,24 @@ DIRECTION_STRING = {
 DEAD_BY_PIT = (
     'Hunter: -AAAAAAAAAaaaaaaaaaaaaaaaaaaaaa!!!!!!!!!!!!!!!\n'
     'Narrator: -Poor soul, he felt in the forat. It\'s better gold in hand than a hundred in the pit\n'
-    'You lose!\n'
     '\n'
+    'You lose!\n'
 )
 KILLED_BY_WUMPUS = (
     'Hunter: -Heyy Wumpus, show me your moves!\n'
     '(CHRUP CHRUP)\n'
     'Wumpus: -Mmmmm... Human meat <3\n'
     'Narrator: -Poor soul, now the legend of the Hunter is inside the Wumpus\'s stomach\n'
-    'You lose!\n'
     '\n'
+    'You lose!\n'
 )
 
 WIN_WITHOUT_KILL_WUMPUS = (
     'Wumpus: -Heyy Hunter, show me your moves!\n'
     'Narrator: Hunter takes the gold cowardly and runs to the exit (faster than Speedy Gonzalez).\n'
     'Wumpus: -NOOooOoOoooooo!!! :(\n'
-    'You win!\n'
     '\n'
+    'You win!\n'
 )
 WIN_WITH_WUMPUS_DEAD = (
     'Narrator: Toss a coin to your Hunter\n'
@@ -37,8 +37,8 @@ WIN_WITH_WUMPUS_DEAD = (
     'Narrator: Oh, valley of plenty, oh\n'
     'Narrator: Toss a coin to your Hunter\n'
     'Narrator: ... Nevermind\n'
-    'You win!\n'
     '\n'
+    'You win!\n'
 )
 
 

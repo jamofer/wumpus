@@ -1,10 +1,12 @@
 import mock
 from mock import MagicMock, patch
 
+from wumpus.cli import wumpus_cli_command_parser
 from wumpus.game.game import GameStatus
 from wumpus.game.game_builder import GameBuilderError
 from wumpus.game.game_options import GameOptions
 from wumpus.cli.wumpus_cli import WumpusCli, game_action
+from wumpus.game.game_service import TurnDirection
 
 
 class TestWumpusCli(object):
@@ -68,14 +70,14 @@ class TestWumpusCli(object):
         self.cli.do_start_game('')
 
         self.cli.do_move('')
-        self.cli.game.status = GameStatus.WIN
+        self.game.status = GameStatus.WIN
         self.move.assert_not_called()
 
         self.cli.do_turn('clockwise')
-        self.cli.game.status = GameStatus.LOSS
+        self.game.status = GameStatus.LOSS
         self.turn.assert_not_called()
 
-        self.cli.game = None
+        self.game = None
         self.cli.do_fire_arrow('')
         self.fire.assert_not_called()
 
@@ -90,7 +92,7 @@ class TestWumpusCli(object):
         self.cli.do_start_game('')
 
         self.start.assert_called_once_with(GameOptions())
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
     def it_prints_the_game_status_on_game_action(self):
         self.render.return_value = 'Game status rendered'
@@ -99,27 +101,27 @@ class TestWumpusCli(object):
         self.render.reset_mock()
         self.cli.do_start_game('')
         self.cli.do_move('')
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
         self.cli.do_start_game('')
         self.cli.do_fire_arrow('')
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
         self.cli.do_start_game('')
         self.cli.do_leave_the_dungeon('')
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
         self.cli.do_start_game('')
         self.cli.do_take_the_gold('')
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
         self.cli.do_start_game('')
         self.cli.do_turn('')
-        self.render.assert_called_once_with(self.cli.game)
+        self.render.assert_called_once_with(self.game)
 
     def it_preserves_docstring_using_game_action_decorator(self):
         @game_action
@@ -127,3 +129,37 @@ class TestWumpusCli(object):
             """doc string"""
 
         assert dummy_do_action_function.__doc__ == 'doc string'
+
+    def it_autocompletes_turn_command_with_empty_arguments(self):
+        result = given_complete_command_text(text='', complete_method=self.cli.complete_turn)
+
+        assert result == wumpus_cli_command_parser.TURN_OPTIONS_ARGUMENTS
+
+    def it_autocompletes_turn_command_when_partial_argument_starts_with_desired_argument(self):
+        result = given_complete_command_text(text='clock', complete_method=self.cli.complete_turn)
+        assert result == [TurnDirection.CLOCKWISE]
+
+        result = given_complete_command_text(text='an', complete_method=self.cli.complete_turn)
+        assert result == [TurnDirection.ANTICLOCKWISE]
+
+    def it_autocompletes_start_game_command_with_empty_arguments(self):
+        result = given_complete_command_text(text='', complete_method=self.cli.complete_start_game)
+
+        assert result == wumpus_cli_command_parser.GAME_OPTIONS_ARGUMENTS
+
+    def it_autocompletes_start_game_command_when_partial_argument_starts_with_desired_argument(self):
+        result = given_complete_command_text(text='col', complete_method=self.cli.complete_start_game)
+        assert result == ['columns=']
+
+        result = given_complete_command_text(text='ro', complete_method=self.cli.complete_start_game)
+        assert result == ['rows=']
+
+        result = given_complete_command_text(text='h', complete_method=self.cli.complete_start_game)
+        assert result == ['hunter_arrows=']
+
+        result = given_complete_command_text(text='bot', complete_method=self.cli.complete_start_game)
+        assert result == ['bottomless_pits=']
+
+
+def given_complete_command_text(text, complete_method):
+    return complete_method(text, line=mock.ANY, start_index=mock.ANY, end_index=mock.ANY)

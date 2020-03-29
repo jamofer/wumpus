@@ -58,7 +58,7 @@ def fire(game):
     if not game.is_wumpus_alive:
         return False
 
-    arrow_position = game.player.position.copy()
+    arrow_position = game.player.position
     while game.is_position_in_game_table(arrow_position):
         arrow_position += game.player.direction
         if game.wumpus.position == arrow_position:

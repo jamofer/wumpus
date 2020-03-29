@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class Vector2D(object):
     x: int
     y: int
@@ -11,12 +11,3 @@ class Vector2D(object):
             self.x + other.x,
             self.y + other.y
         )
-
-    def copy(self):
-        return Vector2D(self.x, self.y)
-
-
-@dataclass(frozen=True)
-class ConstantVector2D(object):
-    x: int
-    y: int

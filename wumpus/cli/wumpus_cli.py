@@ -40,23 +40,26 @@ class WumpusCli(cmd.Cmd):
         self.game = None
 
     def do_exit(self, line):
-        'Exit game'
+        """Exit game"""
         return True
 
     def do_quit(self, line):
-        'Exit game'
+        """Exit game"""
         return True
 
     def do_EOF(self, line):
-        'Exit game'
+        """Exit game"""
         return True
 
+    def emptyline(self):
+        pass
+
     def do_start_game(self, line):
-        'Starts new game. Usage: start_game [columns=4] [rows=4] [hunter_arrows=2] [bottomless_pits=4]'
+        """Starts new game. Usage: start_game [columns=4] [rows=4] [hunter_arrows=2] [bottomless_pits=4]"""
         game_options = GameOptions()
 
         if line:
-            game_options = wumpus_cli_command_parser.parse_game_options(line)
+            game_options = wumpus_cli_command_parser.parse_game_value_options(line)
 
         self.game = game_service.start(game_options)
         print(string_game_renderer.render(self.game))
@@ -93,16 +96,28 @@ class WumpusCli(cmd.Cmd):
         """Leaves the dungeon if you are in the exit position and you have the gold. Usage: leave_the_dungeon"""
         game_service.leave_dungeon(self.game)
 
+    def complete_start_game(self, text, line, start_index, end_index):
+        if not text:
+            return wumpus_cli_command_parser.GAME_OPTIONS_ARGUMENTS
+
+        argument = _autocomplete_argument(text, wumpus_cli_command_parser.GAME_OPTIONS_ARGUMENTS)
+        if argument:
+            return [argument + '=']
+
     def complete_turn(self, text, line, start_index, end_index):
         if not text:
-            return [TurnDirection.CLOCKWISE, TurnDirection.ANTICLOCKWISE]
+            return wumpus_cli_command_parser.TURN_OPTIONS_ARGUMENTS
 
-        if TurnDirection.CLOCKWISE.startswith(text.lower()):
-            return [TurnDirection.CLOCKWISE]
-
-        if TurnDirection.ANTICLOCKWISE.startswith(text.lower()):
-            return [TurnDirection.ANTICLOCKWISE]
+        argument = _autocomplete_argument(text, wumpus_cli_command_parser.TURN_OPTIONS_ARGUMENTS)
+        if argument:
+            return [argument]
 
 
 def _is_game_started(game):
     return game and game.status == GameStatus.PLAYING
+
+
+def _autocomplete_argument(text, arguments):
+    for argument in arguments:
+        if argument.startswith(text):
+            return argument

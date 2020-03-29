@@ -40,7 +40,7 @@ def it_kills_player_when_it_moves_to_the_bottomless_pit():
     game_service.move(game)
 
     assert game.player.position == Vector2D(0, 1)
-    assert game.is_over_bottomless_pit
+    assert game.is_player_over_bottomless_pit
     assert game.status == GameStatus.LOSS
 
 
@@ -51,7 +51,7 @@ def it_kills_player_when_it_moves_to_the_wumpus_and_it_is_alive():
     game_service.move(game)
 
     assert game.player.position == Vector2D(0, 1)
-    assert game.is_over_wumpus
+    assert game.is_player_over_wumpus
     assert game.status == GameStatus.LOSS
 
 
@@ -63,7 +63,7 @@ def it_does_not_kill_player_when_it_moves_to_the_wumpus_and_it_is_dead():
     game_service.move(game)
 
     assert game.player.position == Vector2D(0, 1)
-    assert game.is_over_wumpus
+    assert game.is_player_over_wumpus
     assert game.status == GameStatus.PLAYING
 
 

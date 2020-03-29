@@ -32,47 +32,58 @@ class Game(object):
         return [entity for entity in entities if entity is not None]
 
     @property
-    def is_player_at_exit(game):
-        return game.player.position == game.exit
+    def is_player_at_exit(self):
+        return self.player.position == self.exit
 
     @property
-    def player_has_gold(game):
-        return game.player.has_gold
+    def player_has_gold(self):
+        return self.player.has_gold
 
     @property
-    def is_over_gold(game):
-        if game.player_has_gold:
+    def is_player_over_gold(self):
+        if self.player_has_gold:
             return False
 
-        return game.player.position == game.gold.position
+        return self.player.position == self.gold.position
 
     @property
-    def is_over_wumpus_presence(game):
-        position = game.wumpus.position
-        return game.player.position in _neighbour_positions(position)
+    def is_player_over_wumpus_presence(self):
+        position = self.wumpus.position
+        return self.player.position in _neighbour_positions(position)
 
     @property
-    def is_over_bottomless_pit_presence(game):
+    def is_player_over_bottomless_pit_presence(self):
         neighbour_positions = []
 
-        for bottomless_pit in game.bottomless_pits:
+        for bottomless_pit in self.bottomless_pits:
             neighbour_positions.extend(
                 _neighbour_positions(bottomless_pit.position)
             )
 
-        return game.player.position in neighbour_positions
+        return self.player.position in neighbour_positions
 
     @property
-    def is_over_bottomless_pit(game):
-        return game.player.position in [pit.position for pit in game.bottomless_pits]
+    def is_player_over_bottomless_pit(self):
+        return self.player.position in [pit.position for pit in self.bottomless_pits]
 
     @property
-    def is_wumpus_alive(game):
-        return game.wumpus.is_alive
+    def is_wumpus_alive(self):
+        return self.wumpus.is_alive
 
     @property
-    def is_over_wumpus(game):
-        return game.player.position == game.wumpus.position
+    def is_player_over_wumpus(self):
+        return self.player.position == self.wumpus.position
+
+    @property
+    def is_player_in_front_of_a_wall(self):
+        position_target = self.player.position + self.player.direction
+        return not self.is_position_in_game_table(position_target)
+
+    def is_position_in_game_table(self, position):
+        return (
+                0 <= position.x < self.size[0] and
+                0 <= position.y < self.size[1]
+        )
 
 
 def _neighbour_positions(position):

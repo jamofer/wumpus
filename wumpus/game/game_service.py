@@ -22,10 +22,10 @@ def move(game):
     position = game.player.position
     direction = game.player.direction
 
-    if _is_position_in_game_table(game, position + direction):
+    if game.is_position_in_game_table(position + direction):
         game.player.position += direction
 
-    if game.is_over_bottomless_pit or (game.is_wumpus_alive and game.is_over_wumpus):
+    if game.is_player_over_bottomless_pit or (game.is_wumpus_alive and game.is_player_over_wumpus):
         game.status = GameStatus.LOSS
 
 
@@ -59,7 +59,7 @@ def fire(game):
         return False
 
     arrow_position = game.player.position.copy()
-    while _is_position_in_game_table(game, arrow_position):
+    while game.is_position_in_game_table(arrow_position):
         arrow_position += game.player.direction
         if game.wumpus.position == arrow_position:
             game.wumpus.is_alive = False
@@ -68,15 +68,8 @@ def fire(game):
     return False
 
 
-def _is_position_in_game_table(game, position):
-    return (
-        0 <= position.x < game.size[0] and
-        0 <= position.y < game.size[1]
-    )
-
-
 def take_gold(game):
-    if game.is_over_gold:
+    if game.is_player_over_gold:
         game.player.has_gold = True
         game.gold = None
 

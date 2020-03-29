@@ -43,13 +43,10 @@ WIN_WITH_WUMPUS_DEAD = (
 
 
 def render(game):
-    position = game.player.position
-    direction = game.player.direction
-
-    if game.is_over_bottomless_pit:
+    if game.is_player_over_bottomless_pit:
         return DEAD_BY_PIT
 
-    if game.is_wumpus_alive and game.is_over_wumpus:
+    if game.is_wumpus_alive and game.is_player_over_wumpus:
         return KILLED_BY_WUMPUS
 
     if game.status == GameStatus.WIN and game.is_wumpus_alive:
@@ -58,32 +55,53 @@ def render(game):
     if game.status == GameStatus.WIN and not game.is_wumpus_alive:
         return WIN_WITH_WUMPUS_DEAD
 
-    position_message = 'You are in the exit position' if game.is_player_at_exit else ''
-    gold_message = '1' if game.player_has_gold else '0'
-    presence_message = _render_presence_message(game)
+    return _render_player_status(game)
+
+
+def _render_player_status(game):
+    position = game.player.position
+    direction = game.player.direction
+
+    gold = '1' if game.player_has_gold else '0'
+    presence_messages = _render_presence_message(game)
 
     return (
-        f'Position [{position.x}, {position.y}]. {position_message}\n'
-        f'Direction {DIRECTION_STRING[direction]}\n'
-        f'Golds: {gold_message}\n'
+        '---------------------\n'
+        f'Position:    [{position.x}, {position.y}]\n'
+        f'Direction    {DIRECTION_STRING[direction]}\n'
+        f'Golds:       {gold}\n'
         f'Arrows left: {game.player.arrows_left}\n'
-        f'Presence: {presence_message}\n'
+        '---------------------\n'
+        f'Presences: \n'
+        f'{presence_messages}'
     )
 
 
 def _render_presence_message(game):
-    presence_message = ''
+    presence_messages = []
 
-    if game.is_over_gold:
-        presence_message = 'The gold is here!'
+    if game.is_player_at_exit:
+        presence_messages.append('You are in the exit position')
 
-    if game.is_over_wumpus_presence:
-        presence_message = 'Wumpus stink, you are about to poke'
+    if game.is_player_over_bottomless_pit_presence:
+        presence_messages.append('A fresh breeze fills you with determination')
 
-    if game.is_over_bottomless_pit_presence:
-        presence_message = 'A fresh breeze fills you with determination'
+    if game.is_player_over_wumpus_presence:
+        presence_messages.append('Wumpus stink, you are about to poke')
 
-    return presence_message
+    if game.is_player_over_wumpus:
+        presence_messages.append(
+            'You feel that Cupid is near '
+            'after watch that arrow in the Wumpus heart'
+        )
+
+    if game.is_player_in_front_of_a_wall:
+        presence_messages.append('It feels strong enough to pass through... could it be a wall?')
+
+    if game.is_player_over_gold:
+        presence_messages.append('The gold is here!')
+
+    return _format_presences_messages(presence_messages)
 
 
 def _format_presences_messages(presences_messages):

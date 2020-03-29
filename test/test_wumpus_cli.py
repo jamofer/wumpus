@@ -1,6 +1,8 @@
+import mock
 from mock import MagicMock, patch
 
 from wumpus.game.game import GameStatus
+from wumpus.game.game_builder import GameBuilderError
 from wumpus.game.game_options import GameOptions
 from wumpus.cli.wumpus_cli import WumpusCli, game_action
 
@@ -54,6 +56,13 @@ class TestWumpusCli(object):
         self.cli.do_start_game('bottomless_p=iaats= 2= afghg ')
 
         self.start.assert_called_once_with(GameOptions())
+
+    def it_warns_starting_new_game_when_custom_options_does_not_fit_constraints(self):
+        self.start.side_effect = GameBuilderError
+        self.cli.do_start_game('bottomless_pits=100 columns=0 rows=1')
+
+        self.start.assert_called_once_with(GameOptions(bottomless_pits=100, columns=0, rows=1))
+        assert self.cli.game is None
 
     def it_does_not_perform_a_game_action_if_game_status_is_not_playing(self):
         self.cli.do_start_game('')

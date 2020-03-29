@@ -4,6 +4,7 @@ import json
 from wumpus.cli import wumpus_cli_command_parser
 from wumpus.game import game_service, string_game_renderer
 from wumpus.game.game import GameStatus
+from wumpus.game.game_builder import GameBuilderError
 from wumpus.game.game_options import GameOptions
 from wumpus.game.game_service import TurnDirection
 
@@ -56,13 +57,13 @@ class WumpusCli(cmd.Cmd):
 
     def do_start_game(self, line):
         """Starts new game. Usage: start_game [columns=4] [rows=4] [hunter_arrows=2] [bottomless_pits=4]"""
-        game_options = GameOptions()
+        game_options = wumpus_cli_command_parser.parse_game_value_options(line)
 
-        if line:
-            game_options = wumpus_cli_command_parser.parse_game_value_options(line)
-
-        self.game = game_service.start(game_options)
-        print(string_game_renderer.render(self.game))
+        try:
+            self.game = game_service.start(game_options)
+            print(string_game_renderer.render(self.game))
+        except GameBuilderError:
+            print(f"Game options does not fit constraints: {line}")
 
     @game_action
     def do_turn(self, line):
@@ -76,7 +77,7 @@ class WumpusCli(cmd.Cmd):
 
     @game_action
     def do_fire_arrow(self, line):
-        'Fires an arrow until it reaches the Wumpus or a wall. Usage: fire_arrow'
+        """Fires an arrow until it reaches the Wumpus or a wall. Usage: fire_arrow"""
         if self.game.player.arrows_left == 0:
             print('Not enough arrows')
             return

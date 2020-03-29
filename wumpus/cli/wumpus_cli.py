@@ -1,12 +1,9 @@
 import cmd
-import json
 
 from wumpus.cli import wumpus_cli_command_parser
 from wumpus.game import game_service, string_game_renderer
 from wumpus.game.game import GameStatus
 from wumpus.game.game_builder import GameBuilderError
-from wumpus.game.game_options import GameOptions
-from wumpus.game.game_service import TurnDirection
 
 
 def game_action(func):

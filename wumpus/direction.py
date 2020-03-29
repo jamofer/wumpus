@@ -1,8 +1,8 @@
-from wumpus.vector2d import Vector2D
+from wumpus.vector2d import ConstantVector2D
 
 
 class Direction:
-    NORTH = Vector2D(0, 1)
-    EAST = Vector2D(1, 0)
-    WEST = Vector2D(-1, 0)
-    SOUTH = Vector2D(0, -1)
+    NORTH = ConstantVector2D(0, 1)
+    EAST = ConstantVector2D(1, 0)
+    WEST = ConstantVector2D(-1, 0)
+    SOUTH = ConstantVector2D(0, -1)

@@ -12,8 +12,11 @@ class Vector2D(object):
             self.y + other.y
         )
 
-    def __hash__(self):
-        return hash(self.x) + hash(self.y)
-
     def copy(self):
         return Vector2D(self.x, self.y)
+
+
+@dataclass(frozen=True)
+class ConstantVector2D(object):
+    x: int
+    y: int

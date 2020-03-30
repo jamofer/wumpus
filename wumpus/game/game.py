@@ -1,3 +1,4 @@
+from wumpus.direction import Direction
 from wumpus.vector2d import Vector2D
 
 DEFAULT_SIZE = [4, 4]
@@ -88,8 +89,8 @@ class Game(object):
 
 def _neighbour_positions(position):
     return [
-        Vector2D(position.x, position.y + 1),
-        Vector2D(position.x + 1, position.y),
-        Vector2D(position.x, position.y - 1),
-        Vector2D(position.x - 1, position.y),
+        position + Direction.NORTH,
+        position + Direction.EAST,
+        position + Direction.SOUTH,
+        position + Direction.WEST,
     ]

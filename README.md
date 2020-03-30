@@ -1,5 +1,7 @@
 ## Jamofer's fork in python
 ![Python package](https://github.com/jamofer/wumpus/workflows/Python%20package/badge.svg)
+![Coveralls github](https://img.shields.io/coveralls/github/jamofer/wumpus?style=plastic)
+
 ![Wumpus Game](demo.gif)
 
 ### Install instructions:

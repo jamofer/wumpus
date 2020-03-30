@@ -96,7 +96,7 @@ def _render_presence_message(game):
         )
 
     if game.is_player_in_front_of_a_wall:
-        presence_messages.append('It feels strong enough to pass through... could it be a wall?')
+        presence_messages.append('It feels too strong to pass through... could it be a wall?')
 
     if game.is_player_over_gold:
         presence_messages.append('The gold is here!')

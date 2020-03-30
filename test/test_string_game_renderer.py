@@ -202,7 +202,7 @@ def it_returns_a_human_readable_string_when_player_is_in_front_of_a_wall():
         'Arrows left: 10\n'
         '---------------------\n'
         'Presences: \n'
-        ' * It feels strong enough to pass through... could it be a wall?\n'
+        ' * It feels too strong to pass through... could it be a wall?\n'
     )
 
 
@@ -226,6 +226,6 @@ def it_returns_many_overlapped_presences():
         ' * You are in the exit position\n'
         ' * A fresh breeze fills you with determination\n'
         ' * You feel that Cupid is near after watch that arrow in the Wumpus heart\n'
-        ' * It feels strong enough to pass through... could it be a wall?\n'
+        ' * It feels too strong to pass through... could it be a wall?\n'
         ' * The gold is here!\n'
     )

@@ -1,6 +1,8 @@
 ## Jamofer's fork in python
 ![Python package](https://github.com/jamofer/wumpus/workflows/Python%20package/badge.svg)
-![Coveralls github](https://img.shields.io/coveralls/github/jamofer/wumpus?style=plastic)
+[![codecov](https://codecov.io/gh/jamofer/wumpus/branch/master/graph/badge.svg)](https://codecov.io/gh/jamofer/wumpus)
+
+
 
 ![Wumpus Game](demo.gif)
 

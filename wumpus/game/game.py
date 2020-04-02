@@ -42,7 +42,7 @@ class Game(object):
 
     @property
     def is_player_over_gold(self):
-        if self.player_has_gold:
+        if self.gold is None:
             return False
 
         return self.player.position == self.gold.position

@@ -67,17 +67,15 @@ class TestWumpusCli(object):
         assert self.cli.game is None
 
     def it_does_not_perform_a_game_action_if_game_status_is_not_playing(self):
-        self.cli.do_start_game('')
-
+        self.given_game_status(GameStatus.WIN)
         self.cli.do_move('')
-        self.game.status = GameStatus.WIN
         self.move.assert_not_called()
 
+        self.given_game_status(GameStatus.LOSS)
         self.cli.do_turn('clockwise')
-        self.game.status = GameStatus.LOSS
         self.turn.assert_not_called()
 
-        self.game = None
+        self.given_game_not_started()
         self.cli.do_fire_arrow('')
         self.fire.assert_not_called()
 
@@ -96,32 +94,34 @@ class TestWumpusCli(object):
 
     def it_prints_the_game_status_on_game_action(self):
         self.render.return_value = 'Game status rendered'
-        self.cli.do_start_game('')
+        self.given_game_status(GameStatus.PLAYING)
 
         self.render.reset_mock()
-        self.cli.do_start_game('')
         self.cli.do_move('')
         self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
-        self.cli.do_start_game('')
         self.cli.do_fire_arrow('')
         self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
-        self.cli.do_start_game('')
         self.cli.do_leave_the_dungeon('')
         self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
-        self.cli.do_start_game('')
         self.cli.do_take_the_gold('')
         self.render.assert_called_once_with(self.game)
 
         self.render.reset_mock()
-        self.cli.do_start_game('')
         self.cli.do_turn('')
         self.render.assert_called_once_with(self.game)
+
+    def it_not_fires_arrow_when_no_arrows_left(self):
+        self.given_game_status(GameStatus.PLAYING)
+        self.game.player.arrows_left = 0
+
+        self.cli.do_fire_arrow('')
+        self.fire.assert_not_called()
 
     def it_preserves_docstring_using_game_action_decorator(self):
         @game_action
@@ -159,6 +159,21 @@ class TestWumpusCli(object):
 
         result = given_complete_command_text(text='bot', complete_method=self.cli.complete_start_game)
         assert result == ['bottomless_pits=']
+
+    def it_closes_the_game(self):
+        assert self.cli.do_exit('')
+        assert self.cli.do_quit('')
+        assert self.cli.do_EOF('')
+
+    def it_does_nothing_on_empty_cli_line(self):
+        self.cli.emptyline()
+
+    def given_game_status(self, status):
+        self.cli.do_start_game('')
+        self.game.status = status
+
+    def given_game_not_started(self):
+        self.cli.game = None
 
 
 def given_complete_command_text(text, complete_method):

@@ -125,6 +125,27 @@ def it_returns_a_human_readable_string_with_bottomless_pit_presence():
     )
 
 
+def it_returns_a_human_readable_string_when_player_has_gold():
+    game = a_game().with_hunter().build()
+    game.player.has_gold = True
+    game.gold = None
+    game.status = GameStatus.PLAYING
+    game.wumpus.position = Vector2D(3, 3)
+    game.exit = Vector2D(3, 3)
+
+    human_readable_string = string_game_renderer.render(game)
+
+    assert human_readable_string == (
+        '---------------------\n'
+        'Position:    [0, 0]\n'
+        'Direction    NORTH\n'
+        'Golds:       1\n'
+        'Arrows left: 10\n'
+        '---------------------\n'
+        'Presences: \n'
+    )
+
+
 def it_returns_a_human_readable_string_when_player_has_fallen_in_the_bottomless_pit():
     game = a_game().with_hunter().build()
     game.gold.position = Vector2D(3, 3)
